@@ -6,12 +6,12 @@ class jira::download(
 {
   exec { "download_jira":
     command =>  "wget ${path}",
-    path    =>  "/usr/bin/wget",
+    path    =>  "/usr/bin/",
     creates =>  "/root/${version}.bin",
     }
    file {"/root/${version}.bin":
     owner   =>  root,
     group   =>  root,
-    mode    =>  755,
+    mode    =>  '0755',
     }
 }

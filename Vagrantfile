@@ -16,16 +16,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   vm.customize ['storageattach', :id, '--storagectl', 'SATA Controller',
   #     '--port', '0', '--nonrotational', 'on']
   # end
+  config.vm.provision "shell", inline: <<-SHELL
+    rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+    yum -y install vim-enhanced wget mlocate git
+    yum -y update
+    yum -y install puppet-agent
+    rm -rf /etc/puppet/
+    # mv /vagrant_data/* /etc/puppet
+    SHELL
 
-  config.vm.synced_folder "files", "/etc/puppet/files"
+  # config.vm.synced_folder "/Users/lhegdal/jira", "/etc/puppet/"
 
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "site.pp"
-    puppet.module_path    = "modules"
-    puppet.options        << "--fileserverconfig=/vagrant/files/fileserver.conf"
-    puppet.options        << "--hiera_config=/vagrant/hieradata/vagrant/hiera.yaml"
-    puppet.options        << "--show_diff"
-    # puppet.options        << "--verbose --debug"
-  end
+  #config.vm.provision :puppet do |puppet|
+  #  puppet.manifests_path = "manifests"
+  #  puppet.manifest_file  = "site.pp"
+  #  puppet.module_path    = "modules"
+  #  puppet.options        << "--fileserverconfig=/vagrant/files/fileserver.conf"
+  #  puppet.options        << "--hiera_config=/vagrant/hieradata/vagrant/hiera.yaml"
+  #  puppet.options        << "--show_diff"
+  #  puppet.options        << "--verbose --debug"
+  # end
 end
